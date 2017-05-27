@@ -9,7 +9,6 @@ import openfl.geom.Transform;
 import openfl.Lib;
 
 /**
- * ...
  * @author Michael Greenhut
  */
 class Layer

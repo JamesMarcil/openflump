@@ -2,7 +2,6 @@ package com.michaelgreenhut.openflump;
 import openfl.geom.Point;
 
 /**
- * ...
  * @author Michael Greenhut
  */
 class ImageData

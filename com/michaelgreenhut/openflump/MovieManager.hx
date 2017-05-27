@@ -1,7 +1,6 @@
 package com.michaelgreenhut.openflump;
 
 /**
- * ...
  * @author Michael Greenhut
  */
 class MovieManager

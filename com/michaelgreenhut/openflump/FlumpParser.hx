@@ -8,7 +8,6 @@ import haxe.xml.Fast;
 import openfl.Assets;
 
 /**
- * ...
  * @author Michael Greenhut
  * Flump was created at Three Rings by Charlie Groves, Tim Conkling, and Bruno Garcia.
  * This Flump parser for openFL was created by Michael Greenhut.

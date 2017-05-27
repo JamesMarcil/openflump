@@ -7,7 +7,6 @@ import openfl.geom.Point;
 import openfl.geom.Rectangle;
 
 /**
- * ...
  * @author Michael Greenhut
  */
 class FlumpTextures

@@ -11,7 +11,6 @@ import openfl.Lib;
 import openfl.display.DisplayObjectContainer;
 
 /**
- * ...
  * @author Michael Greenhut
  */
 class FlumpMovie extends Sprite
