@@ -71,7 +71,6 @@ class FlumpMovie extends Sprite
     if (layer.hasImageNamed() != null)
     {
       var textureSprite:Sprite = FlumpTextures.get().getTextureByName(layer.hasImageNamed());
-      //trace("layer name", layer.hasImageNamed(), textureSprite);
       if (textureSprite == null)
       {
         var mv:FlumpMovie = FlumpParser.get().getMovieByName(layer.hasImageNamed());
@@ -124,7 +123,6 @@ class FlumpMovie extends Sprite
       {
         addChild(image);
         count++;
-        trace(_internalX, _internalY, image.name, key, count);
       }
       else
       {
@@ -157,7 +155,6 @@ class FlumpMovie extends Sprite
 
   private function playInternal(e:Event):Void
   {
-    //trace("playing" + name);
     if (!nextFrame())
     {
       removeEventListener(Event.ENTER_FRAME, playInternal);

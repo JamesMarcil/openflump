@@ -44,14 +44,11 @@ class MovieManager
   {
     if (_motionFunctions.length == 0)
       return;
-    trace("num", _motionFunctions.length);
     var numFuncs:Int = -1 * (_motionFunctions.length-1);
 
     for (i in numFuncs...1)
     {
-      trace("eye", i);
       var fn:Void->Bool = _motionFunctions[ -i];
-      trace(Reflect.isFunction(fn));
       var moved:Bool = fn();//Reflect.callMethod(FlumpMovie, _motionFunctions[ -i], []);
       if (!moved)   //if this movie cannot animate any further in its given direction, remove it.
       {

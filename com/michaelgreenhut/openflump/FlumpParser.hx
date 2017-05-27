@@ -38,7 +38,6 @@ class FlumpParser
   {
     if (Lambda.indexOf(_loadedPaths, resourcePath) != -1)
     {
-      //trace("Already loaded this set.");
       return;
     }
     var text:String = Assets.getText(resourcePath);
@@ -149,14 +148,12 @@ class FlumpParser
           }
           var kf:Keyframe = new Keyframe(Std.parseInt(keyframe.att.duration), ref, loc, scale, pivot, tweened, ease, alpha, skew);
           movieLayer.addKeyframe(kf);
-          //trace("movie ", movieLayer.name);
         }
         fm.addLayer(movieLayer);
       }
       //fm.process();
       _movies.push(fm);
     }
-    trace("made movies", _movies);
   }
 
   public function getMovieByName(name:String):FlumpMovie
@@ -167,7 +164,6 @@ class FlumpParser
       {
         var movieToReturn:FlumpMovie = _movies[i];
         //_movies.splice(i, 1);
-        //trace("returning movie ", name, movieToReturn);
         return movieToReturn;
       }
     }

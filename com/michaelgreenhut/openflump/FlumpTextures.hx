@@ -23,7 +23,6 @@ class FlumpTextures
 
   public function makeTexture(sourcebm:Bitmap, rect:Rectangle, name:String, origin:Point):Void
   {
-  //  trace("making", name, rect);
     var newbd:BitmapData = new BitmapData(Std.int(rect.width), Std.int(rect.height), true, 0xffffffff);
     newbd.copyPixels(sourcebm.bitmapData, rect, new Point(0, 0));
     var newbm:Bitmap = new Bitmap(newbd);

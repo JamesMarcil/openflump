@@ -175,7 +175,6 @@ class Layer
 
       }
       //else
-      //  trace("NON TWEEN", this.name, "keyframe ", _index);
     }
     else // _keyframes[_index].getLocation() is never == null, so this "else" will never be executed
     {
