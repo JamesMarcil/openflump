@@ -11,7 +11,7 @@ class MovieManager
 
   private var m_motionFunctions:Array<Void->Bool>;
 
-  public function new(mmkey:MMKey)
+  public function new()
   {
     m_motionFunctions = new Array<Void->Bool>();
   }
@@ -19,7 +19,7 @@ class MovieManager
   public static function get():MovieManager
   {
     if (s_movieManager == null)
-      s_movieManager = new MovieManager(new MMKey());
+      s_movieManager = new MovieManager();
 
     return s_movieManager;
   }
@@ -58,12 +58,4 @@ class MovieManager
     }
   }
 
-}
-
-class MMKey
-{
-  public function new()
-  {
-
-  }
 }

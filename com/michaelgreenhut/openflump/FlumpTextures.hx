@@ -16,7 +16,7 @@ class FlumpTextures
   private var m_textures:Map<String,Sprite>;
   private static var m_flumpTextures:FlumpTextures;
 
-  public function new(ft:FlumpTexturesKey)
+  public function new()
   {
     m_textures = new Map<String,Sprite>();
   }
@@ -39,7 +39,7 @@ class FlumpTextures
   public static function get():FlumpTextures
   {
     if (m_flumpTextures == null)
-      m_flumpTextures = new FlumpTextures(new FlumpTexturesKey());
+      m_flumpTextures = new FlumpTextures();
 
     return m_flumpTextures;
   }
@@ -60,12 +60,4 @@ class FlumpTextures
     return clone;
   }
 
-}
-
-class FlumpTexturesKey
-{
-  public function new()
-  {
-
-  }
 }

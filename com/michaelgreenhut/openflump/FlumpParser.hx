@@ -29,7 +29,7 @@ class FlumpParser
   private var m_movies:Array<FlumpMovie>;
   private var m_loadedPaths:Array<String>;
 
-  public function new(fpkey:FPKey)
+  public function new()
   {
     m_loadedPaths = new Array<String>();
     m_movies = new Array<FlumpMovie>();
@@ -51,7 +51,7 @@ class FlumpParser
   public static function get():FlumpParser
   {
     if (s_flumpParser == null)
-      s_flumpParser = new FlumpParser(new FPKey());
+      s_flumpParser = new FlumpParser();
 
     return s_flumpParser;
   }
@@ -172,12 +172,4 @@ class FlumpParser
     return null;
   }
 
-}
-
-class FPKey
-{
-  public function new()
-  {
-
-  }
 }
