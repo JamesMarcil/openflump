@@ -1,13 +1,13 @@
 package com.michaelgreenhut.openflump ;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.display.LineScaleMode;
-import flash.display.Sprite;
-import flash.events.Event;
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.geom.Transform;
-import flash.Lib;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.LineScaleMode;
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.geom.Transform;
+import openfl.Lib;
 import openfl.display.DisplayObjectContainer;
 
 /**

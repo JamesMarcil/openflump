@@ -3,10 +3,10 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.display.DisplayObjectContainer;
-import flash.geom.Matrix;
-import flash.geom.Point;
-import flash.geom.Transform;
-import flash.Lib;
+import openfl.geom.Matrix;
+import openfl.geom.Point;
+import openfl.geom.Transform;
+import openfl.Lib;
 
 /**
  * ...

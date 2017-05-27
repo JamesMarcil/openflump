@@ -1,5 +1,5 @@
 package com.michaelgreenhut.openflump ;
-import flash.geom.Point;
+import openfl.geom.Point;
 
 /**
  * ...

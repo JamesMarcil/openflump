@@ -1,9 +1,9 @@
 package com.michaelgreenhut.openflump ;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
-import flash.geom.Point;
-import flash.geom.Rectangle;
-import flash.Lib;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.geom.Point;
+import openfl.geom.Rectangle;
+import openfl.Lib;
 import haxe.xml.Fast;
 import openfl.Assets;
 
