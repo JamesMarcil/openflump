@@ -14,7 +14,7 @@ class FlumpTextures
 {
 
   private var m_textures:Map<String,Sprite>;
-  private static var m_flumpTextures:FlumpTextures;
+  private static var s_flumpTextures:FlumpTextures;
 
   public function new()
   {
@@ -38,10 +38,10 @@ class FlumpTextures
 
   public static function get():FlumpTextures
   {
-    if (m_flumpTextures == null)
-      m_flumpTextures = new FlumpTextures();
+    if (s_flumpTextures == null)
+      s_flumpTextures = new FlumpTextures();
 
-    return m_flumpTextures;
+    return s_flumpTextures;
   }
 
   public function getTextureByName(name:String):Sprite
