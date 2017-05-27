@@ -1,4 +1,4 @@
-package com.michaelgreenhut.openflump ;
+package com.michaelgreenhut.openflump;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.LineScaleMode;
@@ -17,31 +17,33 @@ import openfl.display.DisplayObjectContainer;
 class FlumpMovie extends Sprite
 {
 
-  private var _layers:Array<Layer>;
-  private var _callback:Void->Void;
-  private var _internalX:Float;
-  private var _internalY:Float;
+  private static var s_count:Int = 0;
+
+  private var m_layers:Array<Layer>;
+  private var m_callback:Void->Void;
+  private var m_internalX:Float;
+  private var m_internalY:Float;
+
   public var key:Int;
-  private static var count:Int = 0;
 
   public function new()
   {
     super();
     key = Std.random(99999);
-    _layers = new Array<Layer>();
+    m_layers = new Array<Layer>();
   }
 
   public function layers():Array<Layer>
   {
-    return _layers;
+    return m_layers;
   }
 
   public function clone():FlumpMovie
   {
     var fm:FlumpMovie = new FlumpMovie();
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      fm.addLayer(_layers[i].clone());
+      fm.addLayer(m_layers[i].clone());
     }
 
     return fm;
@@ -50,14 +52,14 @@ class FlumpMovie extends Sprite
   public override function toString():String
   {
     var returnString:String = "[";
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      if (_layers[i].getImage() == null)
+      if (m_layers[i].getImage() == null)
         returnString += "null";
       else
       {
-        for (j in 0..._layers[i].getLength())
-          returnString += ("image: " + _layers[i].hasImageNamed());
+        for (j in 0...m_layers[i].getLength())
+          returnString += ("image: " + m_layers[i].hasImageNamed());
       }
     }
     returnString += "]";
@@ -67,7 +69,7 @@ class FlumpMovie extends Sprite
 
   public function addLayer(layer:Layer):Void
   {
-    _layers.push(layer);
+    m_layers.push(layer);
     if (layer.hasImageNamed() != null)
     {
       var textureSprite:Sprite = FlumpTextures.get().getTextureByName(layer.hasImageNamed());
@@ -86,19 +88,19 @@ class FlumpMovie extends Sprite
 
   public function process():Void
   {
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      _layers[i].process();
-      checkForImage(_layers[i]);
+      m_layers[i].process();
+      checkForImage(m_layers[i]);
     }
   }
 
   public function getLayer(name:String):Layer
   {
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      if (_layers[i].name == name)
-        return _layers[i];
+      if (m_layers[i].name == name)
+        return m_layers[i];
     }
 
     return null;
@@ -106,12 +108,12 @@ class FlumpMovie extends Sprite
 
   public function internalX():Float
   {
-    return _internalX;
+    return m_internalX;
   }
 
   public function internalY():Float
   {
-    return _internalY;
+    return m_internalY;
   }
 
   public function checkForImage(layer:Layer):Void
@@ -122,7 +124,7 @@ class FlumpMovie extends Sprite
       if (layer.isShown())
       {
         addChild(image);
-        count++;
+        s_count++;
       }
       else
       {
@@ -131,15 +133,15 @@ class FlumpMovie extends Sprite
           removeChild(image);
         }
       }
-      _internalX = image.x;
-      _internalY = image.y;
+      m_internalX = image.x;
+      m_internalY = image.y;
 
     }
   }
 
   public function play(callb:Void->Void = null):Void
   {
-    _callback = callb;
+    m_callback = callb;
     process();
     if (!hasEventListener(Event.ENTER_FRAME))
       addEventListener(Event.ENTER_FRAME, playInternal);
@@ -147,7 +149,7 @@ class FlumpMovie extends Sprite
 
   public function rewind(callb:Void->Void = null):Void
   {
-    _callback = callb;
+    m_callback = callb;
     process();
     if (!hasEventListener(Event.ENTER_FRAME))
       addEventListener(Event.ENTER_FRAME, rewindInternal);
@@ -158,8 +160,8 @@ class FlumpMovie extends Sprite
     if (!nextFrame())
     {
       removeEventListener(Event.ENTER_FRAME, playInternal);
-      if (_callback != null)
-        _callback();
+      if (m_callback != null)
+        m_callback();
     }
   }
 
@@ -169,19 +171,19 @@ class FlumpMovie extends Sprite
     if (!prevFrame())
     {
       removeEventListener(Event.ENTER_FRAME, rewindInternal);
-      if (_callback != null)
-        _callback();
+      if (m_callback != null)
+        m_callback();
     }
   }
 
   public function nextFrame():Bool
   {
     var more:Bool = false;
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      more = _layers[i].advance();
-      _layers[i].process();
-      checkForImage(_layers[i]);
+      more = m_layers[i].advance();
+      m_layers[i].process();
+      checkForImage(m_layers[i]);
     }
 
     return more;
@@ -190,11 +192,11 @@ class FlumpMovie extends Sprite
   public function prevFrame():Bool
   {
     var more:Bool = false;
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      more = _layers[i].back();
-      _layers[i].process();
-      checkForImage(_layers[i]);
+      more = m_layers[i].back();
+      m_layers[i].process();
+      checkForImage(m_layers[i]);
     }
 
     return more;
@@ -202,10 +204,10 @@ class FlumpMovie extends Sprite
 
   public function gotoEnd():Void
   {
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      _layers[i].goto(_layers[i].getLength());
-      _layers[i].process();
+      m_layers[i].goto(m_layers[i].getLength());
+      m_layers[i].process();
     }
   }
 
@@ -213,10 +215,10 @@ class FlumpMovie extends Sprite
   //needs work
   public function gotoStart():Void
   {
-    for (i in 0..._layers.length)
+    for (i in 0...m_layers.length)
     {
-      _layers[i].goto(0);
-      _layers[i].process();
+      m_layers[i].goto(0);
+      m_layers[i].process();
     }
   }
 

@@ -1,4 +1,4 @@
-package com.michaelgreenhut.openflump ;
+package com.michaelgreenhut.openflump;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
@@ -13,12 +13,12 @@ import openfl.geom.Rectangle;
 class FlumpTextures
 {
 
-  private var _textures:Map<String,Sprite>;
-  private static var _flumpTextures:FlumpTextures;
+  private var m_textures:Map<String,Sprite>;
+  private static var m_flumpTextures:FlumpTextures;
 
   public function new(ft:FlumpTexturesKey)
   {
-    _textures = new Map<String,Sprite>();
+    m_textures = new Map<String,Sprite>();
   }
 
   public function makeTexture(sourcebm:Bitmap, rect:Rectangle, name:String, origin:Point):Void
@@ -32,26 +32,26 @@ class FlumpTextures
     var textureSprite:Sprite = new Sprite();
     textureSprite.addChild(newbm);
     textureSprite.name = name;
-    _textures.set(name, textureSprite);
+    m_textures.set(name, textureSprite);
     textureSprite.visible = false;
   }
 
   public static function get():FlumpTextures
   {
-    if (_flumpTextures == null)
-      _flumpTextures = new FlumpTextures(new FlumpTexturesKey());
+    if (m_flumpTextures == null)
+      m_flumpTextures = new FlumpTextures(new FlumpTexturesKey());
 
-    return _flumpTextures;
+    return m_flumpTextures;
   }
 
   public function getTextureByName(name:String):Sprite
   {
-    return _textures.get(name);
+    return m_textures.get(name);
   }
 
   public function cloneTextureByName(name:String):Sprite
   {
-    var texture:Sprite = _textures.get(name);
+    var texture:Sprite = m_textures.get(name);
     var bd:BitmapData = new BitmapData(Std.int(texture.width), Std.int(texture.height),true,0xffffff);
     bd.draw(texture.getChildAt(0));
     var bm:Bitmap = new Bitmap(bd);

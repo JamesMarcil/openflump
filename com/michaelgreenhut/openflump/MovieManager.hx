@@ -7,20 +7,21 @@ package com.michaelgreenhut.openflump;
 class MovieManager
 {
 
-  private var _motionFunctions:Array<Void->Bool> ;
-  private static var _movieManager:MovieManager;
+  private static var s_movieManager:MovieManager;
+
+  private var m_motionFunctions:Array<Void->Bool>;
 
   public function new(mmkey:MMKey)
   {
-    _motionFunctions = new Array<Void->Bool>();
+    m_motionFunctions = new Array<Void->Bool>();
   }
 
   public static function get():MovieManager
   {
-    if (_movieManager == null)
-      _movieManager = new MovieManager(new MMKey());
+    if (s_movieManager == null)
+      s_movieManager = new MovieManager(new MMKey());
 
-    return _movieManager;
+    return s_movieManager;
   }
 
   /*
@@ -32,7 +33,7 @@ class MovieManager
   public function addAnimationFunction(animationFunc:Void->Bool):Void
   {
     Type.getClass(animationFunc);
-    _motionFunctions.push(animationFunc);
+    m_motionFunctions.push(animationFunc);
   }
 
   /*
@@ -42,17 +43,17 @@ class MovieManager
    * */
   public function animateMovies():Void
   {
-    if (_motionFunctions.length == 0)
+    if (m_motionFunctions.length == 0)
       return;
-    var numFuncs:Int = -1 * (_motionFunctions.length-1);
+    var numFuncs:Int = -1 * (m_motionFunctions.length-1);
 
     for (i in numFuncs...1)
     {
-      var fn:Void->Bool = _motionFunctions[ -i];
-      var moved:Bool = fn();//Reflect.callMethod(FlumpMovie, _motionFunctions[ -i], []);
+      var fn:Void->Bool = m_motionFunctions[ -i];
+      var moved:Bool = fn();//Reflect.callMethod(FlumpMovie, m_motionFunctions[ -i], []);
       if (!moved)   //if this movie cannot animate any further in its given direction, remove it.
       {
-        _motionFunctions.splice( -i, 1);
+        m_motionFunctions.splice( -i, 1);
       }
     }
   }

@@ -1,4 +1,4 @@
-package com.michaelgreenhut.openflump ;
+package com.michaelgreenhut.openflump;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.geom.Point;
@@ -14,45 +14,46 @@ import openfl.Assets;
  * This Flump parser for openFL was created by Michael Greenhut.
  * For directions on how to use Flump, visit:
  * http://threerings.github.io/flump/
-   * Note that this parser makes use of XML only (at the moment), so be sure to export your Flump files
-   * using the XML option.
+ * Note that this parser makes use of XML only (at the moment), so be sure to export your Flump files
+ * using the XML option.
  *
  *
  */
 class FlumpParser
 {
-  private var _fast:Fast;
-  private var _atlas:Bitmap;
-  private var _fm:FlumpMovie;
-  private var _movies:Array<FlumpMovie>;
-  private var _loadedPaths:Array<String>;
-  private static var _flumpParser:FlumpParser;
+  private static var s_flumpParser:FlumpParser;
+
+  private var m_fast:Fast;
+  private var m_atlas:Bitmap;
+  private var m_flumpMovie:FlumpMovie;
+  private var m_movies:Array<FlumpMovie>;
+  private var m_loadedPaths:Array<String>;
 
   public function new(fpkey:FPKey)
   {
-    _loadedPaths = new Array<String>();
-    _movies = new Array<FlumpMovie>();
+    m_loadedPaths = new Array<String>();
+    m_movies = new Array<FlumpMovie>();
   }
 
   public function loadPath(resourcePath:String):Void
   {
-    if (Lambda.indexOf(_loadedPaths, resourcePath) != -1)
+    if (Lambda.indexOf(m_loadedPaths, resourcePath) != -1)
     {
       return;
     }
     var text:String = Assets.getText(resourcePath);
-    _fast = new Fast(Xml.parse(text));
-    _loadedPaths.push(resourcePath);
+    m_fast = new Fast(Xml.parse(text));
+    m_loadedPaths.push(resourcePath);
     makeTextures();
     makeMovies();
   }
 
   public static function get():FlumpParser
   {
-    if (_flumpParser == null)
-      _flumpParser = new FlumpParser(new FPKey());
+    if (s_flumpParser == null)
+      s_flumpParser = new FlumpParser(new FPKey());
 
-    return _flumpParser;
+    return s_flumpParser;
   }
 
   public function textToPoint(text:String):Point
@@ -69,7 +70,7 @@ class FlumpParser
 
   private function makeTextures():Void
   {
-    for (textureGroups in _fast.node.resources.nodes.textureGroups)
+    for (textureGroups in m_fast.node.resources.nodes.textureGroups)
     {
       for (textureGroup in textureGroups.nodes.textureGroup)
       {
@@ -93,7 +94,7 @@ class FlumpParser
   private function makeMovies():Void
   {
 
-    for (movie in _fast.node.resources.nodes.movie)
+    for (movie in m_fast.node.resources.nodes.movie)
     {
       var fm:FlumpMovie = new FlumpMovie();
       fm.name = movie.att.name;
@@ -152,18 +153,18 @@ class FlumpParser
         fm.addLayer(movieLayer);
       }
       //fm.process();
-      _movies.push(fm);
+      m_movies.push(fm);
     }
   }
 
   public function getMovieByName(name:String):FlumpMovie
   {
-    for (i in 0..._movies.length)
+    for (i in 0...m_movies.length)
     {
-      if (_movies[i].name == name)
+      if (m_movies[i].name == name)
       {
-        var movieToReturn:FlumpMovie = _movies[i];
-        //_movies.splice(i, 1);
+        var movieToReturn:FlumpMovie = m_movies[i];
+        //m_movies.splice(i, 1);
         return movieToReturn;
       }
     }

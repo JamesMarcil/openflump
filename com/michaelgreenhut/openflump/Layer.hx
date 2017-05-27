@@ -1,4 +1,4 @@
-package com.michaelgreenhut.openflump ;
+package com.michaelgreenhut.openflump;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.Sprite;
@@ -15,53 +15,53 @@ import openfl.Lib;
 class Layer
 {
 
-  private var _index:Int = 0;
-  private var _keyframes:Array<Keyframe>;
-  private var _currentTexture:String;
-  private var _previousTexture:String;
-  private var _currentLocation:Point;
-  private var _currentScale:Point;
-  private var _currentPivot:Point;
-  private var _currentSkew:Point;
-  private var _currentAlpha:Float = 1;
-  private var _image:DisplayObjectContainer;
-  private var _length:Int = 0;
+  private var m_index:Int = 0;
+  private var m_keyframes:Array<Keyframe>;
+  private var m_currentTexture:String;
+  private var m_previousTexture:String;
+  private var m_currentLocation:Point;
+  private var m_currentScale:Point;
+  private var m_currentPivot:Point;
+  private var m_currentSkew:Point;
+  private var m_currentAlpha:Float = 1;
+  private var m_image:DisplayObjectContainer;
+  private var m_length:Int = 0;
+  private var m_containsImage:String;
+  private var m_destinationIndex:Int;
+  private var m_preTweenIndex:Int = 0;
+  private var m_originalMatrix:Matrix;
 
   public var name:String;
   public var visible:Bool = true;
-  private var _containsImage:String;
-  private var _destinationIndex:Int;
-  private var _preTweenIndex:Int = 0;
-  private var _originalMatrix:Matrix;
   public function new()
   {
-    _keyframes = new Array<Keyframe>();
-    _preTweenIndex = _index;
-    _image = new Sprite();
+    m_keyframes = new Array<Keyframe>();
+    m_preTweenIndex = m_index;
+    m_image = new Sprite();
   }
 
   public function addKeyframe(kf:Keyframe):Void
   {
-    _keyframes.push(kf);
-    _length += kf.getDuration();
+    m_keyframes.push(kf);
+    m_length += kf.getDuration();
     if (kf.getRef() != null)
-      _containsImage = kf.getRef();
+      m_containsImage = kf.getRef();
   }
 
   public function keyFrames():Array<Keyframe>
   {
-    return _keyframes;
+    return m_keyframes;
   }
 
   public function back():Bool
   {
-    if (_index >= 0)
+    if (m_index >= 0)
     {
-      if (!_keyframes[_index].back())
+      if (!m_keyframes[m_index].back())
       {
-        if (_index > 0)
+        if (m_index > 0)
         {
-          _index--;
+          m_index--;
           return true;
         }
         else
@@ -77,13 +77,13 @@ class Layer
   public function advance():Bool
   {
 
-    if (_index < _keyframes.length)
+    if (m_index < m_keyframes.length)
     {
-      if (!_keyframes[_index].advance())
+      if (!m_keyframes[m_index].advance())
       {
-        if (_index < _keyframes.length - 1)
+        if (m_index < m_keyframes.length - 1)
         {
-          _index++;
+          m_index++;
           {
             return true;  //if the current keyframe is at the end, and there are more to go
           }
@@ -101,13 +101,13 @@ class Layer
 
   public function process():Void
   {
-    if (_index < 0 || _index >= _keyframes.length)
+    if (m_index < 0 || m_index >= m_keyframes.length)
       return;
-    if (_keyframes[_index].getLocation() != null)
+    if (m_keyframes[m_index].getLocation() != null)
     {
-      populateCurrentValues(_index);
+      populateCurrentValues(m_index);
 
-      var textureSprite:Sprite = FlumpTextures.get().getTextureByName(_currentTexture);
+      var textureSprite:Sprite = FlumpTextures.get().getTextureByName(m_currentTexture);
 
       if (textureSprite != null)
       {
@@ -117,130 +117,130 @@ class Layer
       else
       {
          //it must be a flump movie  or flipbook, and we don't need to call setImage at all.
-                if (Type.getClass(_image) != FlumpMovie)
-                    _image = FlumpParser.get().getMovieByName(_currentTexture).clone();
+                if (Type.getClass(m_image) != FlumpMovie)
+                    m_image = FlumpParser.get().getMovieByName(m_currentTexture).clone();
 
-                if (!cast(_image, FlumpMovie).nextFrame())
-                    cast(_image, FlumpMovie).gotoStart();  //this loops the internal flipbook
+                if (!cast(m_image, FlumpMovie).nextFrame())
+                    cast(m_image, FlumpMovie).gotoStart();  //this loops the internal flipbook
       }
 
-      if (_image != null)
+      if (m_image != null)
       {
-        if (_keyframes[_index].getTweened()) //Stop-gap code to handle tweens
+        if (m_keyframes[m_index].getTweened()) //Stop-gap code to handle tweens
         {
 
-          _destinationIndex = _index + 1;
-          _preTweenIndex = _index;
-          var nextLoc:Point = _keyframes[_destinationIndex].getLocation().clone();
-          var nextScale:Point = _keyframes[_destinationIndex].getScale().clone();
-          var nextPivot:Point = _keyframes[_destinationIndex].getPivot().clone();
-          var nextAlpha:Float = _keyframes[_destinationIndex].getAlpha();
-          var nextSkew:Point = _keyframes[_destinationIndex].getSkew().clone();
-          _keyframes[_index].internalIndex();
-          var multiplier:Float = _keyframes[_preTweenIndex].internalIndex() /_keyframes[_preTweenIndex].getDuration();
+          m_destinationIndex = m_index + 1;
+          m_preTweenIndex = m_index;
+          var nextLoc:Point = m_keyframes[m_destinationIndex].getLocation().clone();
+          var nextScale:Point = m_keyframes[m_destinationIndex].getScale().clone();
+          var nextPivot:Point = m_keyframes[m_destinationIndex].getPivot().clone();
+          var nextAlpha:Float = m_keyframes[m_destinationIndex].getAlpha();
+          var nextSkew:Point = m_keyframes[m_destinationIndex].getSkew().clone();
+          m_keyframes[m_index].internalIndex();
+          var multiplier:Float = m_keyframes[m_preTweenIndex].internalIndex() /m_keyframes[m_preTweenIndex].getDuration();
 
-          _currentAlpha = _keyframes[_preTweenIndex].getAlpha() + (nextAlpha - _keyframes[_preTweenIndex].getAlpha()) * multiplier;
-          _currentScale.x = _keyframes[_preTweenIndex].getScale().x + (nextScale.x - _keyframes[_preTweenIndex].getScale().x) * multiplier;
-          _currentScale.y = _keyframes[_preTweenIndex].getScale().y + (nextScale.y - _keyframes[_preTweenIndex].getScale().y) * multiplier;
-          _currentLocation.x = _keyframes[_index].getLocation().x + (nextLoc.x - _keyframes[_preTweenIndex].getLocation().x) * multiplier;
+          m_currentAlpha = m_keyframes[m_preTweenIndex].getAlpha() + (nextAlpha - m_keyframes[m_preTweenIndex].getAlpha()) * multiplier;
+          m_currentScale.x = m_keyframes[m_preTweenIndex].getScale().x + (nextScale.x - m_keyframes[m_preTweenIndex].getScale().x) * multiplier;
+          m_currentScale.y = m_keyframes[m_preTweenIndex].getScale().y + (nextScale.y - m_keyframes[m_preTweenIndex].getScale().y) * multiplier;
+          m_currentLocation.x = m_keyframes[m_index].getLocation().x + (nextLoc.x - m_keyframes[m_preTweenIndex].getLocation().x) * multiplier;
 
-          _currentLocation.y = _keyframes[_index].getLocation().y + (nextLoc.y - _keyframes[_preTweenIndex].getLocation().y) * multiplier;
+          m_currentLocation.y = m_keyframes[m_index].getLocation().y + (nextLoc.y - m_keyframes[m_preTweenIndex].getLocation().y) * multiplier;
 
-          _currentPivot.x = _keyframes[_index].getPivot().x + (nextPivot.x - _keyframes[_preTweenIndex].getPivot().x) * multiplier;
-          _currentPivot.y = _keyframes[_index].getPivot().y + (nextPivot.y - _keyframes[_preTweenIndex].getPivot().y) * multiplier;
-          _currentPivot.x *= _currentScale.x;
-          _currentPivot.y *= _currentScale.y;
-          _currentSkew.x = _keyframes[_index].getSkew().x + (nextSkew.x - _keyframes[_preTweenIndex].getSkew().x) * multiplier;
-          _currentSkew.y = _keyframes[_index].getSkew().y + (nextSkew.y - _keyframes[_preTweenIndex].getSkew().y) * multiplier;
+          m_currentPivot.x = m_keyframes[m_index].getPivot().x + (nextPivot.x - m_keyframes[m_preTweenIndex].getPivot().x) * multiplier;
+          m_currentPivot.y = m_keyframes[m_index].getPivot().y + (nextPivot.y - m_keyframes[m_preTweenIndex].getPivot().y) * multiplier;
+          m_currentPivot.x *= m_currentScale.x;
+          m_currentPivot.y *= m_currentScale.y;
+          m_currentSkew.x = m_keyframes[m_index].getSkew().x + (nextSkew.x - m_keyframes[m_preTweenIndex].getSkew().x) * multiplier;
+          m_currentSkew.y = m_keyframes[m_index].getSkew().y + (nextSkew.y - m_keyframes[m_preTweenIndex].getSkew().y) * multiplier;
 
         }
-        _image.scaleX = _currentScale.x;
-        _image.scaleY = _currentScale.y;
+        m_image.scaleX = m_currentScale.x;
+        m_image.scaleY = m_currentScale.y;
 
-        _image.x = _currentLocation.x;
-        _image.y = _currentLocation.y;
-        if (_image.numChildren > 0)
+        m_image.x = m_currentLocation.x;
+        m_image.y = m_currentLocation.y;
+        if (m_image.numChildren > 0)
         {
-          _image.getChildAt(0).x = -_currentPivot.x;
-          _image.getChildAt(0).y = -_currentPivot.y;
+          m_image.getChildAt(0).x = -m_currentPivot.x;
+          m_image.getChildAt(0).y = -m_currentPivot.y;
         }
 
-        //if (_currentSkew.x != 0 || _currentSkew.y != 0)
+        //if (m_currentSkew.x != 0 || m_currentSkew.y != 0)
         {
-          _image.rotation = _currentSkew.x * 180 / Math.PI;
+          m_image.rotation = m_currentSkew.x * 180 / Math.PI;
         }
 
-        _image.visible = visible;
-        _image.alpha = _currentAlpha;
+        m_image.visible = visible;
+        m_image.alpha = m_currentAlpha;
 
       }
       //else
     }
-    else // _keyframes[_index].getLocation() is never == null, so this "else" will never be executed
+    else // m_keyframes[m_index].getLocation() is never == null, so this "else" will never be executed
     {
-      if (_image != null && _image != {})
-        _image.visible = false;
-      _currentLocation = null;
-      _currentTexture = null;
-      _currentScale = null;
-      _currentPivot = null;
+      if (m_image != null && m_image != {})
+        m_image.visible = false;
+      m_currentLocation = null;
+      m_currentTexture = null;
+      m_currentScale = null;
+      m_currentPivot = null;
     }
   }
 
   private function populateCurrentValues(index:Int):Void
   {
-    _previousTexture = _currentTexture;
-    _currentTexture = _keyframes[index].getRef();
+    m_previousTexture = m_currentTexture;
+    m_currentTexture = m_keyframes[index].getRef();
 
-    _currentScale = _keyframes[index].getScale().clone();
-    _currentLocation = _keyframes[index].getLocation().clone();
-    _currentPivot = _keyframes[index].getPivot().clone();
-    _currentPivot.x *= _currentScale.x;
-    _currentPivot.y *= _currentScale.y;
-    _currentAlpha = _keyframes[index].getAlpha();
-    _currentSkew = _keyframes[index].getSkew().clone();
+    m_currentScale = m_keyframes[index].getScale().clone();
+    m_currentLocation = m_keyframes[index].getLocation().clone();
+    m_currentPivot = m_keyframes[index].getPivot().clone();
+    m_currentPivot.x *= m_currentScale.x;
+    m_currentPivot.y *= m_currentScale.y;
+    m_currentAlpha = m_keyframes[index].getAlpha();
+    m_currentSkew = m_keyframes[index].getSkew().clone();
   }
 
   public function isShown():Bool
   {
-    return _image.visible;
+    return m_image.visible;
   }
 
   public function setImage(bd:BitmapData):Void
   {
     /*var bm:Bitmap = new Bitmap(bd);
-    _image = new Sprite();
-    _image.addChild(bm);
-    _originalMatrix = _image.transform.matrix.clone();*/
+    m_image = new Sprite();
+    m_image.addChild(bm);
+    m_originalMatrix = m_image.transform.matrix.clone();*/
 
-    if (_currentTexture != _previousTexture) {
+    if (m_currentTexture != m_previousTexture) {
       var bm:Bitmap = new Bitmap(bd);
-      if (_image.numChildren > 0 && _image.getChildAt(0) != null) (_image.removeChildAt(0));
-      _image.addChild(bm);
-      _originalMatrix = _image.transform.matrix.clone();
+      if (m_image.numChildren > 0 && m_image.getChildAt(0) != null) (m_image.removeChildAt(0));
+      m_image.addChild(bm);
+      m_originalMatrix = m_image.transform.matrix.clone();
     }
   }
 
   public function setMovie(mv:FlumpMovie)
   {
-    _image = mv;
+    m_image = mv;
   }
 
   public function getImage():DisplayObjectContainer
   {
-    return _image;
+    return m_image;
   }
 
   public function getMovie():FlumpMovie
   {
-    var mv:FlumpMovie = cast(_image, FlumpMovie);
+    var mv:FlumpMovie = cast(m_image, FlumpMovie);
 
     return mv;
   }
 
   public function hasImageNamed():String
   {
-    return _containsImage;
+    return m_containsImage;
   }
 
   public function reset():Void
@@ -254,23 +254,23 @@ class Layer
    */
   public function goto(internalIndex:Int):Void
   {
-    _index = 0;
+    m_index = 0;
 
     //var count:Int = 0;
-    for (i in 0..._keyframes.length)
+    for (i in 0...m_keyframes.length)
     {
-      _keyframes[i].reset();
+      m_keyframes[i].reset();
     }
 
-    while(_index < _keyframes.length )
+    while(m_index < m_keyframes.length )
     {
-      if (_index/*count*/ == internalIndex)
+      if (m_index/*count*/ == internalIndex)
       {
         break;
       }
-      if (!_keyframes[_index].advance())
+      if (!m_keyframes[m_index].advance())
       {
-        _index++;
+        m_index++;
       }
       //count++;
 
@@ -280,21 +280,21 @@ class Layer
   public function clone():Layer
   {
     var layer:Layer = new Layer();
-    for (i in 0..._keyframes.length)
+    for (i in 0...m_keyframes.length)
     {
-      layer.addKeyframe(_keyframes[i].clone());
+      layer.addKeyframe(m_keyframes[i].clone());
     }
     return layer;
   }
 
   public function getFrame():Int
   {
-    return _index;
+    return m_index;
   }
 
   public function getLength():Int
   {
-    return _length;
+    return m_length;
   }
 
 }

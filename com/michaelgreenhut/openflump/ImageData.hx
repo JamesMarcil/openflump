@@ -1,4 +1,4 @@
-package com.michaelgreenhut.openflump ;
+package com.michaelgreenhut.openflump;
 import openfl.geom.Point;
 
 /**

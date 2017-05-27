@@ -1,4 +1,4 @@
-package com.michaelgreenhut.openflump ;
+package com.michaelgreenhut.openflump;
 import openfl.geom.Point;
 
 /**
@@ -9,109 +9,109 @@ import openfl.geom.Point;
 class Keyframe
 {
 
-  private var _duration:Int;
-  private var _index:Int = 0;
-  private var _ref:String;
-  private var _location:Point;
-  private var _scale:Point;
-  private var _pivot:Point;
-  private var _tweened:Bool;
-  private var _ease:Float;
-  private var _alpha:Float;
-  private var _skew:Point;
+  private var m_duration:Int;
+  private var m_index:Int = 0;
+  private var m_ref:String;
+  private var m_location:Point;
+  private var m_scale:Point;
+  private var m_pivot:Point;
+  private var m_tweened:Bool;
+  private var m_ease:Float;
+  private var m_alpha:Float;
+  private var m_skew:Point;
 
   public function new(duration:Int, ref:String = null, location:Point = null, scale:Point = null, pivot:Point = null, tweened:Bool = false, ease:Float = 0, alpha:Float = 1, skew:Point = null )
   {
-    _duration = duration;
-    _location = location;
-    _ref = ref;
+    m_duration = duration;
+    m_location = location;
+    m_ref = ref;
     if (scale == null)
       scale = new Point(1, 1);
-    _scale = scale;
-    _pivot = pivot;
-    _tweened = tweened;
-    _ease = ease;
-    _alpha = alpha;
+    m_scale = scale;
+    m_pivot = pivot;
+    m_tweened = tweened;
+    m_ease = ease;
+    m_alpha = alpha;
     if (skew == null)
-      _skew = new Point(0, 0);
+      m_skew = new Point(0, 0);
     else
-      _skew = skew;
+      m_skew = skew;
   }
 
   public function clone():Keyframe
   {
-    return new Keyframe(_duration,_ref,_location,_scale,_pivot,_tweened,_ease,_alpha,_skew);
+    return new Keyframe(m_duration,m_ref,m_location,m_scale,m_pivot,m_tweened,m_ease,m_alpha,m_skew);
   }
 
   public function back():Bool
   {
-    if (_index > 0)
-      _index--;
+    if (m_index > 0)
+      m_index--;
 
-    return (_index > 0);
+    return (m_index > 0);
   }
 
   public function advance():Bool
   {
-    if (_index < _duration)
-      _index++;
+    if (m_index < m_duration)
+      m_index++;
 
-    return (_index < _duration);
+    return (m_index < m_duration);
   }
 
   public function reset():Void
   {
-    _index = 0;
+    m_index = 0;
   }
 
   public function internalIndex():Int
   {
-    return _index;
+    return m_index;
   }
 
   public function getRef():String
   {
-    return _ref;
+    return m_ref;
   }
 
   public function getDuration():Int
   {
-    return _duration;
+    return m_duration;
   }
 
   public function getLocation():Point
   {
-    return _location;
+    return m_location;
   }
 
   public function getSkew():Point
   {
-    return _skew;
+    return m_skew;
   }
 
   public function getScale():Point
   {
-    return _scale;
+    return m_scale;
   }
 
   public function getPivot():Point
   {
-    return _pivot;
+    return m_pivot;
   }
 
   public function getTweened():Bool
   {
-    return _tweened;
+    return m_tweened;
   }
 
   public function getEase():Float
   {
-    return _ease;
+    return m_ease;
   }
 
   public function getAlpha():Float
   {
-    return _alpha;
+    return m_alpha;
   }
 
 }
