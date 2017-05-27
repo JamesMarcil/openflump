@@ -117,16 +117,15 @@ class FlumpParser
 					{
 						ref = keyframe.att.ref;
 					}
-					if (keyframe.has.loc)
+					//fix by gigbig@libero.it
+					loc = keyframe.has.loc ? textToPoint(keyframe.att.loc) : new Point(0, 0);
+					
+					if (keyframe.has.tweened)
 					{
-						loc = textToPoint(keyframe.att.loc);
-						if (keyframe.has.tweened)
-						{
-							tweened = (keyframe.att.tweened == "false" ? false : true);
-						}
-						else
-							tweened = true;
+						tweened = keyframe.att.tweened == "false" ? false : true;
 					}
+					else
+						tweened = true;
 					if (keyframe.has.scale)
 					{
 						scale = textToPoint(keyframe.att.scale);
@@ -154,10 +153,10 @@ class FlumpParser
 				}
 				fm.addLayer(movieLayer);
 			}
-			fm.process();
+			//fm.process();
 			_movies.push(fm);
 		}
-		trace("made movies");
+		trace("made movies", _movies);
 	}
 	
 	public function getMovieByName(name:String):FlumpMovie
@@ -167,7 +166,8 @@ class FlumpParser
 			if (_movies[i].name == name)
 			{
 				var movieToReturn:FlumpMovie = _movies[i];
-				_movies.splice(i, 1);
+				//_movies.splice(i, 1);
+				//trace("returning movie ", name, movieToReturn);
 				return movieToReturn;
 			}
 		}

@@ -8,6 +8,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 import flash.geom.Transform;
 import flash.Lib;
+import openfl.display.DisplayObjectContainer;
 
 /**
  * ...
@@ -20,11 +21,48 @@ class FlumpMovie extends Sprite
 	private var _callback:Void->Void;
 	private var _internalX:Float;
 	private var _internalY:Float;
+	public var key:Int;
+	private static var count:Int = 0;
 
 	public function new() 
 	{
 		super();
+		key = Std.random(99999);
 		_layers = new Array<Layer>();
+	}
+	
+	public function layers():Array<Layer>
+	{
+		return _layers;
+	}
+	
+	public function clone():FlumpMovie
+	{
+		var fm:FlumpMovie = new FlumpMovie();
+		for (i in 0..._layers.length)
+		{
+			fm.addLayer(_layers[i].clone());
+		}
+		
+		return fm;
+	}
+	
+	public override function toString():String 
+	{
+		var returnString:String = "[";
+		for (i in 0..._layers.length)
+		{
+			if (_layers[i].getImage() == null)
+				returnString += "null";
+			else
+			{
+				for (j in 0..._layers[i].getLength())
+					returnString += ("image: " + _layers[i].hasImageNamed());
+			}
+		}
+		returnString += "]";
+		
+		return returnString;
 	}
 	
 	public function addLayer(layer:Layer):Void
@@ -81,10 +119,12 @@ class FlumpMovie extends Sprite
 	{
 		if (layer.getImage() != null)
 		{
-			var image:Sprite = layer.getImage();
+			var image:DisplayObjectContainer = layer.getImage();
 			if (layer.isShown())
 			{
 				addChild(image);
+				count++;
+				trace(_internalX, _internalY, image.name, key, count);
 			}
 			else 
 			{
@@ -95,6 +135,7 @@ class FlumpMovie extends Sprite
 			}
 			_internalX = image.x;
 			_internalY = image.y;
+			
 		}
 	}
 	
